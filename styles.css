@@ -1,0 +1,431 @@
+/* ==========================================================================
+   Mothers Foundation — styles.css
+   Light / warm palette direction, per DESIGN_BRIEF.md (recommendation,
+   not yet approved by Jerry — see NEEDS JERRY in the build report).
+
+   Design tokens below are computed, not guessed. Contrast ratios (WCAG
+   relative-luminance formula) are recorded next to each pairing that is
+   actually used for text or focus indicators in this file.
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+
+  /* ---- Brand palette (Brand Foundation + Sept 8 amendment: navy anchor) ---- */
+  --peace-white: #FAFAFA;
+  --navy:        #103A74;   /* navy on peace-white:  10.71:1 */
+  --navy-dark:   #0A2A54;   /* hover/active shade of navy, darker = more contrast */
+  --purple:      #7B5EA7;   /* purple on peace-white: 5.03:1 (brand-computed) */
+  --orange:      #E8712A;   /* decorative only — never text on white (2.95:1, fails) */
+  --gold:        #F5C842;   /* decorative only — never text on white (1.52:1, fails) */
+  --green:       #4A9B6F;   /* decorative only — never text on white (3.24:1, fails AA body) */
+  --white:       #FFFFFF;   /* white on navy: 11.18:1 */
+
+  /* ---- Ink: warm near-black, chosen deliberately (not a template default) ---- */
+  --ink:         #221B16;   /* ink on peace-white: 16.28:1 */
+  --ink-soft:    #5B5048;   /* ink-soft on peace-white: 7.49:1 */
+  --footer-soft: #B9C6DA;   /* footer-soft on navy: 6.47:1 */
+
+  /* ---- Type scale ---- */
+  --font-display: Georgia, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --fs-display: clamp(2.75rem, 1.2rem + 6vw, 6.25rem);
+  --fs-h2:      clamp(2rem, 1.1rem + 3.2vw, 3.25rem);
+  --fs-lead:    clamp(1.2rem, 1rem + 0.8vw, 1.6rem);
+  --fs-body:    1.125rem;
+  --fs-small:   0.95rem;
+
+  /* ---- Spacing scale (4/8px rhythm) ---- */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 48px;
+  --space-6: 64px;
+  --space-7: 96px;
+  --space-8: 128px;
+
+  --max-width: 1180px;
+}
+
+/* ---- Reset ---- */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+img, svg { max-width: 100%; display: block; }
+ul { margin: 0; padding: 0; list-style: none; }
+h1, h2, h3, p { margin: 0; }
+a { color: inherit; }
+
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+body {
+  background: var(--peace-white);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ---- Focus states (visible everywhere, no exceptions) ---- */
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--navy);   /* navy on peace-white: 10.71:1, exceeds 3:1 non-text min */
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.site-footer a:focus-visible,
+.btn:focus-visible {
+  outline: 3px solid var(--gold);   /* gold on navy: 7.04:1 */
+  outline-offset: 3px;
+}
+
+/* ---- Skip link ---- */
+.skip-link {
+  position: absolute;
+  left: 0;
+  top: -100%;
+  background: var(--navy);
+  color: var(--white);
+  padding: var(--space-2) var(--space-3);
+  z-index: 100;
+  text-decoration: none;
+  font-weight: 600;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* ---- Visually hidden (for screen-reader-only structural headings) ---- */
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- Layout helpers ---- */
+.section-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-3);
+}
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--peace-white);
+  border-bottom: 1px solid rgba(16, 58, 116, 0.12);
+}
+.header-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-2) var(--space-3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+.brand { display: inline-flex; }
+.logo { height: 28px; width: auto; }
+
+/* Nav toggle (mobile only) */
+.nav-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: 1px solid rgba(16, 58, 116, 0.25);
+  border-radius: 8px;
+  color: var(--navy);
+  cursor: pointer;
+}
+.nav-toggle svg { width: 22px; height: 22px; }
+
+.primary-nav {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  background: var(--peace-white);
+  border-bottom: 1px solid rgba(16, 58, 116, 0.12);
+  display: none;
+}
+.primary-nav.is-open { display: block; }
+.primary-nav ul {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-2) var(--space-3) var(--space-3);
+}
+.primary-nav a {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: var(--space-1) 0;
+  text-decoration: underline;
+  text-decoration-color: rgba(16, 58, 116, 0.35);
+  text-underline-offset: 3px;
+  color: var(--navy);
+  font-weight: 600;
+}
+.primary-nav a:hover { text-decoration-color: var(--navy); }
+.nav-num {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+  font-weight: 400;
+  width: 1.6em;
+}
+
+@media (min-width: 768px) {
+  .nav-toggle { display: none; }
+  .primary-nav {
+    position: static;
+    display: block;
+    border-bottom: none;
+    background: transparent;
+  }
+  .primary-nav ul {
+    flex-direction: row;
+    gap: var(--space-4);
+    padding: 0;
+  }
+  .primary-nav a { min-height: auto; }
+}
+
+/* ==========================================================================
+   Sections — shared
+   ========================================================================== */
+.section, .hero {
+  padding: var(--space-6) 0;
+  scroll-margin-top: 84px;
+}
+.hero { scroll-margin-top: 0; }
+
+.section-num {
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+  font-weight: 700;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: var(--space-2);
+}
+
+h2 {
+  font-family: var(--font-display);
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.1;
+  max-width: 16ch;
+}
+
+.section-rule {
+  height: 4px;
+  width: 96px;
+  margin: var(--space-3) 0 var(--space-4);
+  border-radius: 2px;
+}
+.rule-orange { background: var(--orange); }
+.rule-green  { background: var(--green); }
+.rule-navy   { background: var(--navy); }
+.rule-purple-gold {
+  background: linear-gradient(90deg, var(--purple), var(--gold));
+}
+
+.prose {
+  max-width: 68ch;
+  display: grid;
+  gap: var(--space-3);
+}
+.prose p {
+  font-size: var(--fs-body);
+  color: var(--ink);
+}
+
+.muted { color: var(--ink-soft); }
+
+/* ---- Values list (Who we are) ---- */
+.values {
+  margin-top: var(--space-5);
+  display: grid;
+  gap: var(--space-2);
+  max-width: 68ch;
+}
+.values li {
+  font-size: var(--fs-body);
+  color: var(--ink);
+  padding-left: var(--space-3);
+  border-left: 3px solid rgba(16, 58, 116, 0.18);
+}
+.values strong { color: var(--navy); }
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+.hero {
+  padding-top: var(--space-7);
+  padding-bottom: var(--space-6);
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: var(--fs-display);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.02;
+  max-width: 14ch;
+  opacity: 1;
+  transform: none;
+}
+.hero-lead {
+  margin-top: var(--space-4);
+  font-size: var(--fs-lead);
+  color: var(--ink-soft);
+  max-width: 60ch;
+  line-height: 1.5;
+}
+.gradient-band {
+  margin-top: var(--space-6);
+  height: 10px;
+  width: 100%;
+  max-width: 560px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--orange) 0%,
+    var(--gold) 25%,
+    var(--green) 50%,
+    var(--purple) 75%,
+    var(--peace-white) 100%
+  );
+}
+
+/* One deliberate, orchestrated motion moment: the hero fades/rises on load.
+   Base state above is already the fully-visible end state, so anyone with
+   no JS, a slow connection, or reduced motion simply sees it static. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero h1, .hero-lead, .gradient-band {
+    animation: hero-rise 0.7s ease-out both;
+  }
+  .hero-lead { animation-delay: 0.12s; }
+  .gradient-band { animation-delay: 0.24s; }
+
+  @keyframes hero-rise {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* ==========================================================================
+   Button
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--space-5);
+  min-height: 48px;
+  padding: var(--space-2) var(--space-4);
+  background: var(--navy);
+  color: var(--white);           /* white on navy: 11.18:1 */
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.btn:hover { background: var(--navy-dark); }
+
+/* ==========================================================================
+   Contact
+   ========================================================================== */
+.link-large {
+  display: inline-block;
+  font-size: var(--fs-lead);
+  font-weight: 700;
+  color: var(--navy);            /* navy on peace-white: 10.71:1 */
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.crisis-box {
+  margin-top: var(--space-6);
+  padding: var(--space-4);
+  border: 1px solid rgba(16, 58, 116, 0.18);
+  border-radius: 12px;
+  background: rgba(16, 58, 116, 0.04);
+  max-width: 60ch;
+}
+.crisis-box h3 {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: var(--space-2);
+}
+.crisis-box p { color: var(--ink-soft); margin-bottom: var(--space-2); }
+.crisis-list {
+  display: grid;
+  gap: var(--space-1);
+}
+.crisis-list li { color: var(--ink); }
+.crisis-list strong { color: var(--navy); font-variant-numeric: tabular-nums; }
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.site-footer {
+  background: var(--navy);
+  color: var(--white);
+  padding: var(--space-6) 0;
+  margin-top: var(--space-6);
+}
+.footer-inner {
+  display: grid;
+  gap: var(--space-2);
+}
+.footer-legal {
+  color: var(--white);           /* white on navy: 11.18:1 */
+  font-size: var(--fs-body);
+  font-weight: 600;
+}
+.footer-sub {
+  color: var(--footer-soft);     /* footer-soft on navy: 6.47:1 */
+  font-size: var(--fs-small);
+}
+
+/* ==========================================================================
+   Breakpoints
+   ========================================================================== */
+@media (min-width: 768px) {
+  .section-inner { padding: 0 var(--space-5); }
+  .section, .hero { padding-top: var(--space-7); padding-bottom: var(--space-7); }
+  h2 { max-width: 20ch; }
+}
+
+@media (min-width: 1024px) {
+  .values { grid-template-columns: 1fr 1fr; gap: var(--space-3) var(--space-5); }
+  .hero { padding-top: var(--space-8); }
+}
+
+@media (min-width: 1440px) {
+  .section-inner { padding: 0 var(--space-6); }
+}
